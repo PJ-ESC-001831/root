@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/dockerfiles/api.Dockerfile
+    restart: on-failure
+    container_name: api
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/api
+    depends_on:
+      - mongodb
+
+  mongodb:
+    build:
+      context: .
+      dockerfile: docker/dockerfiles/mongodb.Dockerfile
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./.docker/mongodb/tmp/dumps:/tmp/backup/dumps
