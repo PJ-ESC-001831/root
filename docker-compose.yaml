@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   workspace:
@@ -17,13 +17,18 @@ services:
     environment:
       - MONGO_URI=mongodb://mongodb:27017/api
     depends_on:
-      - mongodb
+      - postgres
 
-  mongodb:
+  postgres:
     build:
       context: .
-      dockerfile: docker/dockerfiles/mongodb.Dockerfile
+      dockerfile: docker/dockerfiles/postgres.Dockerfile
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "27017:27017"
+      - "5432:5432"
     volumes:
-      - ./.docker/mongodb/tmp/dumps:/tmp/backup/dumps
+      - .docker/postgres/data:/var/lib/postgresql/data
+      - .docker/postgres/certs:/var/lib/postgresql/certs
