@@ -30,7 +30,7 @@ commit_and_push() {
     return 1
   fi
 
-  final_commit_message="[$commit_type]: $commit_message"
+  final_commit_message="$commit_type: $commit_message"
 
   # Function to commit and push changes in the current directory
   commit_push_current_dir() {
