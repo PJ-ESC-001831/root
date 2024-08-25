@@ -109,7 +109,7 @@ alias generate="npm --prefix /workspace/api/src/database/ run drizzle-kit:genera
 alias migrate="npm --prefix /workspace/api/src/database/ run drizzle-kit:migrate"
 
 # Environment shortcuts
-alias rc-sync="cp api/.devcontainer/.bashrc ~/.bashrc && source ~/.bashrc"
+alias rc-sync="cp /workspace/api/.devcontainer/.bashrc $HOME/.bashrc && source $HOME/.bashrc"
 
 # Function to display aliases in a table format
 display_aliases() {
