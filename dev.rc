@@ -91,11 +91,11 @@ alias rc-sync="cp api/.devcontainer/.bashrc ~/.bashrc && source ~/.bashrc"
 # Function to display aliases in a table format
 display_aliases() {
   echo -e "\nLoaded Aliases:"
-  echo -e "-----------------------------"
+  echo -e "----------------------------------------------"
   echo -e "Alias\t\tCommand"
-  echo -e "-----------------------------"
+  echo -e "----------------------------------------------"
   alias | awk -F'[ =]' '{cmd=""; for (i=3; i<=NF; i++) cmd=cmd $i " "; printf "%-15s %s\n", $2, cmd}'
-  echo -e "-----------------------------\n"
+  echo -e "----------------------------------------------\n"
 }
 
 # Display the loaded aliases when the script is sourced
