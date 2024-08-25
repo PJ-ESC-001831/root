@@ -82,8 +82,8 @@ alias cap=commit_and_push
 # NPM shortcuts
 alias ni="npm install"
 alias nd="npm install -D"
-alias generate="npm --prefix api/src/database/ run drizzle-kit:generate"
-alias migrate="npm --prefix api/src/database/ run drizzle-kit:migrate"
+alias generate="npm --prefix /workspace/api/src/database/ run drizzle-kit:generate"
+alias migrate="npm --prefix /workspace/api/src/database/ run drizzle-kit:migrate"
 
 # Environment shortcuts
 alias rc-sync="cp api/.devcontainer/.bashrc ~/.bashrc && source ~/.bashrc"
