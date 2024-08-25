@@ -110,6 +110,7 @@ alias migrate="npm --prefix /workspace/api/src/database/ run drizzle-kit:migrate
 
 # Environment shortcuts
 alias rc-sync="cp /workspace/api/.devcontainer/.bashrc $HOME/.bashrc && source $HOME/.bashrc"
+alias db-connect="psql -h postgres -p 5432 -U user -d co-maker"
 
 # Function to display aliases in a table format
 display_aliases() {
