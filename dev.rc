@@ -23,6 +23,21 @@ commit_and_push() {
     read commit_message
   else
     commit_message="$1"
+    echo "What is the conventional type? Default is 'feat':"
+    read commit_type
+
+    if [ -z "$commit_type" ]; then
+      commit_type="feat"
+    fi
+
+    case $commit_type in
+      feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)
+        ;;
+      *)
+        echo "Invalid type. Choose from (feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)."
+        return 1
+        ;;
+    esac
   fi
 
   if [ -z "$commit_message" ]; then
@@ -34,7 +49,8 @@ commit_and_push() {
 
   # Function to commit and push changes in the current directory
   commit_push_current_dir() {
-    git add . && git commit -m "$final_commit_message"
+    local message="$1"
+    git add . && git commit -m "$message"
 
     # Check if commit was successful
     if [ $? -ne 0 ]; then
@@ -58,7 +74,7 @@ commit_and_push() {
 
   # Recursively commit and push changes up to the root
   while true; do
-    commit_push_current_dir
+    commit_push_current_dir "$final_commit_message"
     superproject_dir=$(git rev-parse --show-superproject-working-tree)
     if [ -z "$superproject_dir" ]; then
       break
@@ -70,7 +86,14 @@ commit_and_push() {
   # Walk back down to the original directory
   for dir in "${dir_stack[@]}"; do
     cd "$dir"
-    commit_push_current_dir
+    if [ "$dir" == "$original_dir" ]; then
+      # Get the relative path of the sub-module
+      relative_path=$(realpath --relative-to="$(git rev-parse --show-toplevel)" "$dir")
+      submodule_name=$(basename "$relative_path")
+      commit_push_current_dir "sync: updated ${submodule_name} sub-module"
+    else
+      commit_push_current_dir "$final_commit_message"
+    fi
   done
 
   cd "$original_dir"
