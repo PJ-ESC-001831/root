@@ -17,8 +17,14 @@ services:
       service: api
     depends_on:
       - postgres
+  
+  checkout:
+    extends:
+      file: apps/checkout/docker-compose.yaml
+      service: checkout
 
   postgres:
+    container_name: pj-esc-001831-postgres
     build:
       context: .
       dockerfile: docker/dockerfiles/postgres.Dockerfile

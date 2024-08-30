@@ -1,3 +1,6 @@
 [submodule "api"]
 	path = api
 	url = git@co-maker.github.com:PJ-ESC-001831/api.git
+[submodule "apps/checkout"]
+	path = apps/checkout
+	url = git@co-maker.github.com:PJ-ESC-001831/checkout.git
