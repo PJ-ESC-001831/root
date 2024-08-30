@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Base directory to search for Git repositories
+BASE_DIR="/workspace"
+GIT_CONFIG_SRC="/tmp/.gitconfig"
+GIT_CONFIG_PATH="$HOME/.gitconfig"
+SSH_SRC="/tmp/.ssh"
+
 # Function to commit and push changes to Git
 commit_and_push() {
   if [ -z "$1" ]; then
@@ -129,6 +135,38 @@ update_all() {
 
   cd "$original_dir"
 }
+
+# Recuresively add all Git repositories in the base directory to the safe.directory list
+trust_workspace() {
+  # Check if both the base directory and the .gitconfig file exist
+  if [ -d "$BASE_DIR" ] && [ -f "$GIT_CONFIG_SRC" ]; then
+      # Copy the .gitconfig file to $HOME/.gitconfig
+      rm -f "$GIT_CONFIG_PATH" && cp "$GIT_CONFIG_SRC" "$GIT_CONFIG_PATH"
+
+      # Find all .git directories within the base directory
+      find "$BASE_DIR" -type d -name ".git" | while read -r gitdir; do
+          # Extract the repository path
+          repo_dir=$(dirname "$gitdir")
+          
+          # Add the repository to the safe.directory list
+          if git config --file "$GIT_CONFIG_PATH" --add safe.directory "$repo_dir"; then
+              echo "Added $repo_dir to safe.directory in $GIT_CONFIG_PATH"
+          else
+              echo "Failed to add $repo_dir to safe.directory in $GIT_CONFIG_PATH" >&2
+          fi
+      done
+  else
+      if [ ! -d "$BASE_DIR" ]; then
+          echo "Directory $BASE_DIR does not exist. Skipping safe.directory configuration."
+      fi
+      if [ ! -f "$GIT_CONFIG_PATH" ]; then
+          echo "File $GIT_CONFIG_PATH does not exist. Skipping safe.directory configuration."
+      fi
+  fi
+}
+
+# Alias for trusting all Git repositories in the base directory
+alias trust=trust_workspace
 
 # Alias for easily committing across submodules
 alias cap=commit_and_push
