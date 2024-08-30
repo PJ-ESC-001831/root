@@ -105,8 +105,36 @@ commit_and_push() {
   cd "$original_dir"
 }
 
+# Update and push changes for the entire directory tree
+update_all() {
+  original_dir=$(pwd)
+  dir_stack=()
+
+  # Recursively update and push changes up to the root
+  while true; do
+    git pull --recurse-submodules
+    superproject_dir=$(git rev-parse --show-superproject-working-tree)
+    if [ -z "$superproject_dir" ]; then
+      break
+    fi
+    dir_stack+=("$superproject_dir")
+    cd "$superproject_dir"
+  done
+
+  # Walk back down to the original directory
+  for dir in "${dir_stack[@]}"; do
+    cd "$dir"
+    git pull --recurse-submodules
+  done
+
+  cd "$original_dir"
+}
+
 # Alias for easily committing across submodules
 alias cap=commit_and_push
+
+# Alias for updating the whole list of directories and submodules
+alias cup=update_all
 
 # NPM shortcuts
 alias ni="npm install"
