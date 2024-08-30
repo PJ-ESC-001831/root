@@ -136,7 +136,7 @@ update_all() {
   cd "$original_dir"
 }
 
-# Recuresively add all Git repositories in the base directory to the safe.directory list
+# Recursively add all Git repositories in the base directory to the safe.directory list
 trust_workspace() {
   # Check if both the base directory and the .gitconfig file exist
   if [ -d "$BASE_DIR" ] && [ -f "$GIT_CONFIG_SRC" ]; then
@@ -165,6 +165,18 @@ trust_workspace() {
   fi
 }
 
+# Function to recursively push all Git repositories and submodules
+push_all_repos() {
+  find "$BASE_DIR" -type d -name ".git" | while read -r gitdir; do
+    repo_dir=$(dirname "$gitdir")
+    echo "Processing repository: $repo_dir"
+    cd "$repo_dir"
+    git add .
+    git commit -m "Automated commit"
+    git push --recurse-submodules=on-demand
+  done
+}
+
 # Alias for trusting all Git repositories in the base directory
 alias trust=trust_workspace
 
@@ -173,6 +185,9 @@ alias cap=commit_and_push
 
 # Alias for updating the whole list of directories and submodules
 alias cup=update_all
+
+# Alias for pushing all Git repositories and submodules
+alias pup=push_all_repos
 
 # NPM shortcuts
 alias ni="npm install"
