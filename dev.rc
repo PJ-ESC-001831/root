@@ -210,4 +210,5 @@ display_aliases() {
 }
 
 # Display the loaded aliases when the script is sourced
-display_aliases
+alias help=display_aliases
+trust_workspace
