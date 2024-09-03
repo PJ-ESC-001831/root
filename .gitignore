@@ -131,6 +131,3 @@ dist
 
 # Docker 
 .docker/**/*
-
-# Development Assets
-**/public/assets/images
