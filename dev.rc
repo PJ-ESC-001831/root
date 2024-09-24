@@ -213,6 +213,7 @@ display_aliases() {
 cd() {
     # Predefined paths
     local api="/workspace/api"
+    local database="/workspace/api/src/database"
     local checkout="/workspace/apps/checkout"
     local workspace="/workspace"
 
@@ -227,6 +228,9 @@ cd() {
         workspace)
             command cd "$workspace" "${@:2}"  # Change to /workspace
             ;;
+        database)
+            command cd "$database" "${@:2}"  # Change to /workspace/api/src/database
+            ;;
         *)
             command cd "$@"  # Default behaviour
             ;;
@@ -240,7 +244,7 @@ _cd_completion() {
     existing_completions=$(compgen -d)
 
     # Define your custom commands
-    local commands="api checkout workspace"
+    local commands="api checkout workspace database"
 
     # Combine existing completions with custom commands
     COMPREPLY=($(compgen -W "$commands $existing_completions" -- "${COMP_WORDS[1]}"))
