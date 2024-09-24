@@ -16,14 +16,14 @@ commit_and_push() {
       commit_type="feat"
     fi
 
-    case $commit_type in
+  case $commit_type in
       feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)
-        ;;
+          ;;
       *)
-        echo "Invalid type. Choose from (feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)."
-        return 1
-        ;;
-    esac
+          echo "Invalid type. Choose from (feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)."
+          return 1
+          ;;
+  esac
 
     echo "Please enter a commit message:"
     read commit_message
@@ -48,8 +48,8 @@ commit_and_push() {
 
   if [ -z "$commit_message" ]; then
     echo "Commit message is required. Exiting."
-    return 1
-  fi
+          return 1
+      fi
 
   # Get the absolute path of the top-level directory of the Git repository
   repo_path=$(git rev-parse --show-toplevel)
@@ -208,6 +208,46 @@ display_aliases() {
   alias | awk -F'[ =]' '{cmd=""; for (i=3; i<=NF; i++) cmd=cmd $i " "; printf "%-15s %s\n", $2, cmd}'
   echo -e "----------------------------------------------\n"
 }
+
+# Define a custom cd function
+cd() {
+    # Predefined paths
+    local api="/workspace/api"
+    local checkout="/workspace/apps/checkout"
+    local workspace="/workspace"
+
+    # Check the input argument
+    case "$1" in
+        api)
+            command cd "$api" "${@:2}"  # Change to /workspace/api
+            ;;
+        checkout)
+            command cd "$checkout" "${@:2}"  # Change to /workspace/apps/checkout
+            ;;
+        workspace)
+            command cd "$workspace" "${@:2}"  # Change to /workspace
+            ;;
+        *)
+            command cd "$@"  # Default behaviour
+            ;;
+    esac
+}
+
+# Custom completion function for cd
+_cd_completion() {
+    # Get existing directory completions, including absolute paths
+    local existing_completions
+    existing_completions=$(compgen -d)
+
+    # Define your custom commands
+    local commands="api checkout workspace"
+
+    # Combine existing completions with custom commands
+    COMPREPLY=($(compgen -W "$commands $existing_completions" -- "${COMP_WORDS[1]}"))
+}
+
+# Register the completion function
+complete -F _cd_completion cd
 
 # Display the loaded aliases when the script is sourced
 alias help=display_aliases
