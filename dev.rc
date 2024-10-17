@@ -210,7 +210,7 @@ display_aliases() {
 }
 
 # Define a custom cd function
-cd() {
+j2d() {
     # Predefined paths
     local api="/workspace/api"
     local database="/workspace/api/src/database"
@@ -237,8 +237,8 @@ cd() {
     esac
 }
 
-# Custom completion function for cd
-_cd_completion() {
+# Custom completion function for j2d
+_j2d_completion() {
     # Get existing directory completions, including absolute paths
     local existing_completions
     existing_completions=$(compgen -d)
@@ -248,10 +248,13 @@ _cd_completion() {
 
     # Combine existing completions with custom commands
     COMPREPLY=($(compgen -W "$commands $existing_completions" -- "${COMP_WORDS[1]}"))
+
+    # Optionally sort the completions
+    COMPREPLY=($(printf '%s\n' "${COMPREPLY[@]}" | sort -u))
 }
 
-# Register the completion function
-complete -F _cd_completion cd
+# Register the completion function for j2d
+complete -F _j2d_completion j2d
 
 # Display the loaded aliases when the script is sourced
 alias help=display_aliases
