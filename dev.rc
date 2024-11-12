@@ -6,6 +6,17 @@ GIT_CONFIG_SRC="/tmp/.gitconfig"
 GIT_CONFIG_PATH="$HOME/.gitconfig"
 SSH_SRC="/tmp/.ssh"
 
+# Set user IDs
+if [ -z "${UID+x}" ]; then
+  # Assign "id -u" to UID
+  export UID=$(id -u)
+fi
+
+if [ -z "${GID+x}" ]; then
+  # Assign "id -u" to UID
+  export GID=$(id -g)
+fi
+
 # Function to commit and push changes to Git
 commit_and_push() {
   if [ -z "$1" ]; then
@@ -255,6 +266,25 @@ _j2d_completion() {
 
 # Register the completion function for j2d
 complete -F _j2d_completion j2d
+
+# Load contents of a .env file into the environment
+load_env() {
+  # Default to .env if no file is provided
+  local file="${1:-.env}"
+
+  # Check if the specified file exists
+  if [ -f "$file" ]; then
+    # Read each line in the file
+    while IFS='=' read -r key value; do
+      # Export the key-value pairs if the line is not empty and not a comment
+      if [[ ! -z "$key" && "$key" != \#* ]]; then
+        export "$key"="$value"
+      fi
+    done < "$file"
+  else
+    echo "File '$file' not found."
+  fi
+}
 
 # Display the loaded aliases when the script is sourced
 alias help=display_aliases
