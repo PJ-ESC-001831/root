@@ -289,3 +289,4 @@ load_env() {
 # Display the loaded aliases when the script is sourced
 alias help=display_aliases
 trust_workspace
+load_env
