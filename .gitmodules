@@ -4,3 +4,6 @@
 [submodule "apps/checkout"]
 	path = apps/checkout
 	url = git@co-maker.github.com:PJ-ESC-001831/checkout.git
+[submodule "supabase"]
+	path = supabase
+	url = https://github.com/supabase/supabase.git
