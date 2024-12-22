@@ -2,38 +2,19 @@ name: pj-esc-001831
 
 services:
   workspace:
+    container_name: pj-esc-001831-workspace
     build:
       context: .
       dockerfile: Dockerfile
-    user: "${UID}:${GID}"
+    user: "${UID:-1000}:${GID:-1000}"
+    networks:
+      - pj-esc-001831-api-network
+      - pj-esc-001831-proxy-network
     volumes:
       - .:/workspace
     working_dir: /workspace
     tty: true
 
-  api:
-    extends:
-      file: api/docker-compose.yaml
-      service: api
-    depends_on:
-      - postgres
-  
-  checkout:
-    extends:
-      file: apps/checkout/docker-compose.yaml
-      service: checkout
-
-  postgres:
-    container_name: pj-esc-001831-postgres
-    build:
-      context: .
-      dockerfile: docker/dockerfiles/postgres.Dockerfile
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    ports:
-      - "5432:5432"
-    volumes:
-      - .docker/postgres/data:/var/lib/postgresql/data
-      - .docker/postgres/certs:/var/lib/postgresql/certs
+networks:
+  pj-esc-001831-proxy-network:
+    driver: bridge
