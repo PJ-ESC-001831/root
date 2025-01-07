@@ -7,14 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     user: "${UID:-1000}:${GID:-1000}"
-    networks:
-      - pj-esc-001831-api-network
-      - pj-esc-001831-proxy-network
     volumes:
       - .:/workspace
     working_dir: /workspace
     tty: true
-
-networks:
-  pj-esc-001831-proxy-network:
-    driver: bridge
