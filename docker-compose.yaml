@@ -11,3 +11,27 @@ services:
       - .:/workspace
     working_dir: /workspace
     tty: true
+
+  nginx:
+    build:
+      context: .
+      dockerfile: dockerfiles/nginx.Dockerfile
+    container_name: pj-esc-001831-nginx
+    restart: on-failure
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d:ro
+    tty: true
+    networks:
+      pj-esc-001831-api-network:
+      pj-esc-001831-default-network:
+        ipv4_address: 192.168.2.10
+
+networks:
+  pj-esc-001831-default-network:
+    name: pj-esc-001831-default-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.2.0/24
+  pj-esc-001831-api-network:
+    external: true
