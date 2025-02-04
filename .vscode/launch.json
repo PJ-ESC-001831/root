@@ -1,0 +1,26 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "command": "npm --prefix api run dev:watch",
+      "name": "Start API",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "npm --prefix api/src/database run drizzle-kit:generate",
+      "name": "Generate Drizzle Schemas",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "command": "npm --prefix api/src/database run drizzle-kit:migrate",
+      "name": "Migrate Drizzle Schemas",
+      "request": "launch",
+      "type": "node-terminal"
+    }
+  ]
+}
